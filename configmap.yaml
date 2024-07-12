@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: delete-running-pending-pods-script
+  namespace: default
+data:
+  delete-running-pending-pods.sh: |
+    #!/bin/bash
+    kubectl get pods --all-namespaces | grep -e Evicted -e Terminated -e NodeShutdown -e CrashLoopBackOff -e Shutdown -e Error -e ContainerStatusUnknown -e OOMKilled | awk '{print $2, $1}'  | xargs kubectl delete pod
